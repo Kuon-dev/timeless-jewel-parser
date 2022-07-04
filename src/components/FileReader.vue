@@ -18,8 +18,13 @@
         </option>
       </select>
 
-      <button class="bg-sky-500" @click.prevent="submit()">Submit</button>
+      <button class="bg-sky-500 py-2 text-white rounded-md" @click.prevent="submit()">Submit</button>
     </form>
+
+    <section>
+      <div>seed: </div>
+      <div ref="render">{{ render }}</div>
+    </section>
   </div>
 </template>
 
@@ -29,11 +34,26 @@ import Papa from 'papaparse';
 import { ref, computed } from 'vue';
 
 export default {
-  setup() {
+  props: {
+    wanted: {
+      type: Array,
+      required: false,
+    },
+    ideal: {
+      type: Array,
+      required: false,
+    },
+    notables: {
+      type: Array,
+      required: false,
+    },
+  },
+  setup(props) {
     const index = ref('');
     const selected = ref([]);
+    const render = ref(null)
 
-    const selectedTimelessJewel = event => {
+    const selectedTimelessJewel = () => {
       return selected.value;
     };
 
@@ -42,6 +62,9 @@ export default {
     });
 
     const submit = () => {
+      const wanted = (props.wanted)
+      const ideal = (props.ideal)
+      const notables = (props.notables)
       const curr = selectedTimelessJewel();
       const idealCountArr = [];
 
@@ -83,7 +106,11 @@ export default {
             return prev.count > current.count ? prev : current;
           });
           console.log('Best timeless');
+          console.log(max)
+          render.value.innerHTML = max.seed
+          console.log(render)
         } catch (e) {
+          console.log(e)
           console.log("couldn't find timeless");
         }
       }, 2000);
@@ -108,11 +135,10 @@ export default {
       },
     };
 
-    const wanted = ['chance_to_deal_double_damage_%'];
-
-    const ideal = ['chance_to_intimidate_on_hit_%'];
-
-    const notables = [
+      // ['chance_to_deal_double_damage_%'];
+      //['chance_to_intimidate_on_hit_%'];
+      /*
+      [
       'Herbalism',
       'Swift Venoms',
       'Master Fletcher',
@@ -122,12 +148,14 @@ export default {
       'Fervour',
       'Survivalist',
     ];
+       */
 
     return {
       timelessJewels,
       selectedTimelessJewel,
       selected,
       submit,
+      render,
     };
   },
 };

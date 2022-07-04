@@ -1,0 +1,61 @@
+<template>
+  <div>
+    <section>
+      <div class="text-left">
+        <ul>
+          <li v-for="(item, index) in list" :key="index" class="py-1">
+            <button 
+              class="bg-rose-500 text-white rounded-md px-5 py-2"
+              @click="del($event, index)"
+            > 
+              del 
+            </button>
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+    </section>
+    <!-- input section -->
+    <section class="flex flex-col">
+      <form class="flex flex-col">
+        <label class="text-2xl" >{{ inputType }}</label>
+        <input class="border-2 border-black" type="text" v-model="item">
+        <button @click.prevent="add" class="bg-rose-500 text-white mt-5 mb-5 py-5"> Add notables</button>
+      </form>
+    </section> 
+
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    list: {
+      type: Array,
+      default: null,
+      required: false,
+    },
+    inputType: {
+      type: String,
+      default: null,
+      required: false,
+    } 
+
+
+  },
+  setup(props) {
+    const listItem = props.list
+    const inputType = props.inputType
+
+    return {
+      listItem,
+      inputType,
+    }
+  },
+
+}
+</script>
+
+<style>
+
+</style><

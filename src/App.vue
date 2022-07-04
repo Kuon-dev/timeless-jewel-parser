@@ -9,7 +9,6 @@ import './index.css'
 <template>
   <MainLanding>
   </MainLanding>
-  <FileReader />
 </template>
 
 <style>
@@ -20,5 +19,11 @@ import './index.css'
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.div-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
