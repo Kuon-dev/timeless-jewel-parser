@@ -82,6 +82,7 @@ export default {
                 });
 
                 if (wantedCount >= 1) {
+                  console.log('pass')
                   idealCountArr.push({
                     seed: index + 10000,
                     count: idealCount,
