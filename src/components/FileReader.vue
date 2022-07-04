@@ -81,14 +81,13 @@ export default {
                   else if (ideal.includes(val)) idealCount += 1;
                 });
 
-                if (wantedCount >= 3) {
+                if (wantedCount >= 1) {
                   idealCountArr.push({
                     seed: index + 10000,
                     count: idealCount,
                     required: wantedCount,
                   });
                 }
-                console.log(idealCountArr)
               });
             },
           });
