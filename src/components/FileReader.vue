@@ -74,6 +74,8 @@ export default {
               results.data.map((rows, index) => {
                 let wantedCount = 0;
                 let idealCount = 0;
+                console.log(results.data)
+                console.log(text)
 
                 notables.map(notable => {
                   const val = rows[notable];
@@ -88,6 +90,10 @@ export default {
                     count: idealCount,
                     required: wantedCount,
                   });
+                }
+
+                else {
+                  console.log(wantedCount)
                 }
               });
             },
