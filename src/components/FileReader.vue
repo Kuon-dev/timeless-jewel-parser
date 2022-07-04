@@ -96,6 +96,7 @@ export default {
         // get all the minimum required notables
 
         try {
+          console.log(idealCountArr)
           if (idealCountArr.legnth < 1) throw 'couldnt find a timeless';
           // get the ideal optional notables
           const max = idealCountArr.reduce(function (prev, current) {
@@ -109,7 +110,7 @@ export default {
           console.log(e)
           console.log("couldn't find timeless");
         }
-      }, 2000);
+      }, 3000);
     };
 
     const timelessJewels = {
