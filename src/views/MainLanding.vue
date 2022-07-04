@@ -36,7 +36,7 @@
   </div> 
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed } from 'vue'
 import FileReader from '../components/FileReader.vue'
 import ListEventManager from '../components/ListEventManager.vue'
