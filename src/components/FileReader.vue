@@ -1,29 +1,24 @@
 <template>
   <div>
     <!-- select timeless -->
-    <form>
-      <select
-        class="text-2xl"
-        v-model="selected"
-        @change="selectedTimelessJewel()"
+    <form class="flex flex-col gap-4">
+      <label>Select required limit (recommended up to 3)</label>
+      <input
+        type="number"
+        class="border-2 border-rose-500"
+        v-model="thresholdLimit"
+      />
+      <button
+        class="bg-sky-500 py-2 text-white rounded-md"
+        @click.prevent="submitJson()"
       >
-        <option
-          v-for="(value, index) in timelessJewels"
-          :key="index"
-          class="text-2xl"
-          ref="index"
-          :value="value.file"
-        >
-          {{ value.name }}
-        </option>
-      </select>
-
-      <button class="bg-sky-500 py-2 text-white rounded-md" @click.prevent="submit()">Submit</button>
+        Submit
+      </button>
     </form>
 
     <section>
-      <div>seed: </div>
-      <div ref="render">{{ render }}</div>
+      <div>seed:</div>
+      <div ref="render" v-show="isRendered">{{ seedNumber }}</div>
     </section>
   </div>
 </template>
@@ -47,78 +42,82 @@ export default {
       type: Array,
       required: false,
     },
+    currentSelectedTimeless: {
+      type: String,
+      required: false,
+    },
   },
   setup(props) {
-    const selected = ref([]);
-    const render = ref(null)
+    const render = ref('');
+    const thresholdLimit = ref(null);
 
-    const selectedTimelessJewel = () => {
-      return selected.value;
-    };
+    const isRendered = computed(() => {
+      return render.value !== '';
+    });
 
+    let seedNumber = '';
 
-    const submit = () => {
-      const wanted = (props.wanted)
-      const ideal = (props.ideal)
-      const notables = (props.notables)
-      const curr = selectedTimelessJewel();
+    const submitJson = () => {
+      console.log('Searching...');
+      const wanted = props.wanted;
+      const ideal = props.ideal;
+      const notables = props.notables;
+      const limit = thresholdLimit.value;
+      // get current timeless
+      const curr = props.currentSelectedTimeless;
+      console.log(curr);
       const idealCountArr = [];
-      console.log(wanted, ideal, notables)
+      if (
+        wanted.length < 1 ||
+        ideal.length < 1 ||
+        wanted === null ||
+        ideal === null
+      ) {
+        console.error('empty input detected');
+      }
 
       fetch(curr)
-        .then(response => response.text())
-        .then(text => {
-          Papa.parse(text, {
-            header: true,
-            complete: results => {
-              results.data.map((rows, index) => {
-                let wantedCount = 0;
-                let idealCount = 0;
-                console.log(results.data)
-                console.log(text)
+        .then(response => response.json())
+        .then(data => {
+          data.map((rows, index) => {
+            let wantedCount = 0;
+            let idealCount = 0;
 
-                notables.map(notable => {
-                  const val = rows[notable];
-                  if (wanted.includes(val)) wantedCount += 1;
-                  else if (ideal.includes(val)) idealCount += 1;
-                });
+            notables.map(notable => {
+              const val = rows[notable];
+              if (wanted.includes(val)) wantedCount += 1;
+              else if (ideal.includes(val)) idealCount += 1;
+            });
 
-                if (wantedCount >= 1) {
-                  console.log('pass')
-                  idealCountArr.push({
-                    seed: index + 10000,
-                    count: idealCount,
-                    required: wantedCount,
-                  });
-                }
-
-                else {
-                  console.log(wantedCount)
-                }
+            if (wantedCount >= limit) {
+              idealCountArr.push({
+                seed: index + 10000,
+                count: idealCount,
+                required: wantedCount,
               });
-            },
+            }
           });
+          const setResult = setTimeout(() => {
+            // get all the minimum required notables
+
+            try {
+              if (idealCountArr.legnth < 1) throw 'couldnt find a timeless';
+              // get the ideal optional notables
+              const max = idealCountArr.reduce(function (prev, current) {
+                return prev.count > current.count ? prev : current;
+              });
+              console.log('Best timeless');
+              console.log(max);
+              seedNumber = max.seed;
+              render.value.innerHTML = max.seed;
+            } catch (e) {
+              console.log(e);
+              console.log("couldn't find timeless");
+            }
+          }, 3000);
+          console.log('other results');
+          console.log(idealCountArr);
         });
-
-      const setResult = setTimeout(() => {
-        // get all the minimum required notables
-
-        try {
-          console.log(idealCountArr)
-          if (idealCountArr.legnth < 1) throw 'couldnt find a timeless';
-          // get the ideal optional notables
-          const max = idealCountArr.reduce(function (prev, current) {
-            return prev.count > current.count ? prev : current;
-          });
-          console.log('Best timeless');
-          console.log(max)
-          render.value.innerHTML = max.seed
-          console.log(render)
-        } catch (e) {
-          console.log(e)
-          console.log("couldn't find timeless");
-        }
-      }, 10000);
     };
 
     const timelessJewels = {
@@ -128,7 +127,7 @@ export default {
       },
       lethalPride: {
         name: 'Lethal Pride',
-        file: '/TimelessJewelData-main/LethalPrideSeeds.csv',
+        file: 'http://localhost:3000/Lethal_Pride',
       },
       militantFaith: {
         name: 'Militant Faith',
@@ -140,9 +139,9 @@ export default {
       },
     };
 
-      // ['chance_to_deal_double_damage_%'];
-      //['chance_to_intimidate_on_hit_%'];
-      /*
+    // ['chance_to_deal_double_damage_%'];
+    //['chance_to_intimidate_on_hit_%'];
+    /*
       [
       'Herbalism',
       'Swift Venoms',
@@ -157,10 +156,11 @@ export default {
 
     return {
       timelessJewels,
-      selectedTimelessJewel,
-      selected,
-      submit,
       render,
+      submitJson,
+      thresholdLimit,
+      isRendered,
+      seedNumber,
     };
   },
 };
