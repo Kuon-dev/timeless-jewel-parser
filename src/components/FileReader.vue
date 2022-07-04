@@ -88,6 +88,7 @@ export default {
                     required: wantedCount,
                   });
                 }
+                console.log(idealCountArr)
               });
             },
           });
@@ -111,7 +112,7 @@ export default {
           console.log(e)
           console.log("couldn't find timeless");
         }
-      }, 3000);
+      }, 10000);
     };
 
     const timelessJewels = {
