@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // import BrutalRestraintSeeds from "/TimelessJewelData-main/BrutalRestraintSeeds.csv"
 import Papa from 'papaparse';
 import { ref, computed } from 'vue';
@@ -49,7 +49,6 @@ export default {
     },
   },
   setup(props) {
-    const index = ref('');
     const selected = ref([]);
     const render = ref(null)
 
@@ -57,9 +56,6 @@ export default {
       return selected.value;
     };
 
-    const checkSelectedOptioon = computed(() => {
-      console.log(selectedTimelessJewel());
-    });
 
     const submit = () => {
       const wanted = (props.wanted)
