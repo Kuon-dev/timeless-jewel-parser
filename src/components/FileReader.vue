@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 // import BrutalRestraintSeeds from "/TimelessJewelData-main/BrutalRestraintSeeds.csv"
 import Papa from 'papaparse';
 import { ref, computed } from 'vue';

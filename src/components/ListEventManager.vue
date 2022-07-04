@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script >
 import { ref, defineEmits } from 'vue'
 
 export default {
