@@ -63,6 +63,7 @@ export default {
       const notables = (props.notables)
       const curr = selectedTimelessJewel();
       const idealCountArr = [];
+      console.log(wanted, ideal, notables)
 
       fetch(curr)
         .then(response => response.text())
