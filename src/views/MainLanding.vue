@@ -143,7 +143,9 @@ export default {
 
     const listItemNotable = () => {
       fetch('./TimelessJewelData-main/LethalPrideSeeds.json')
-        .then(response => response.json())
+        .then(response => {
+          console.log(response)
+        })
         .then(data => {
           console.log(data)
           console.log('fetching data....');
