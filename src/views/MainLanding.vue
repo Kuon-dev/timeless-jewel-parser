@@ -142,9 +142,10 @@ export default {
     };
 
     const listItemNotable = () => {
-      fetch('http://localhost:3000/Lethal_Pride')
+      fetch('./TimelessJewelData-main/LethalPrideSeeds.json')
         .then(response => response.json())
         .then(data => {
+          console.log(data)
           console.log('fetching data....');
           const unwantedNotable = ['field1', 'field2'];
           const treeNotables = [];
