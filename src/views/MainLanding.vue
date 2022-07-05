@@ -83,7 +83,7 @@ export default {
       },
       lethalPride: {
         name: 'Lethal Pride',
-        file: 'http://localhost:3000/Lethal_Pride',
+        file: './TimelessJewelData-main/LethalPrideSeeds.json',
       },
       militantFaith: {
         name: 'Militant Faith',
@@ -185,6 +185,7 @@ export default {
         })
         .catch(e => {
           console.log('Error: ' + e);
+          console.log(e)
         });
     };
 
